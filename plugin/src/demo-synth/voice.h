@@ -74,14 +74,11 @@ struct preset_t
 		data[index] = v;
 	}
 
-	preset_t *clone()
+	void clone(preset_t *np)
 	{
-		auto np = new preset_t();
 		np->defs = defs;
 		np->name = name;
 		for (int i = 0; i < param_count; ++i) np->data[i] = data[i].load();
-
-		return np;
 	}
 };
 

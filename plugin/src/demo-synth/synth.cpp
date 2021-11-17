@@ -49,11 +49,6 @@ DSynth::DSynth(plum::ihost *host, bool nogui)
 
 DSynth::~DSynth()
 { 
-	if (m_preset)
-	{
-		delete m_preset;
-	}
-
 	printf("DEL demo::DSynth\n"); 
 }
 
@@ -141,10 +136,8 @@ uint32_t DSynth::get_selected_preset()
 void DSynth::set_selected_preset(uint32_t index)
 {
 	m_current_preset = index;
-	auto new_sel = m_bank[index].clone();
-
-	auto old = m_preset.exchange(new_sel);
-	delete old;
+	m_bank[index].clone(m_preset_temp);
+	m_preset_temp = m_preset.exchange(m_preset_temp);
 
 	if (m_gui)
 	{

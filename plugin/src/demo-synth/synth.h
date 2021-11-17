@@ -120,7 +120,9 @@ private:
 	std::array<const char *, 2> channel_names {"left", "right"};
 
 	uint32_t m_current_preset {0};
-	std::atomic<preset_t *> m_preset {nullptr};
+	std::array<preset_t, 2> m_preset_pool;
+	std::atomic<preset_t *> m_preset {&m_preset_pool[1]};
+	preset_t *m_preset_temp {&m_preset_pool[0]};	
 
 	const float m_voice_count = 8;
 	std::vector<voice> m_voice;
