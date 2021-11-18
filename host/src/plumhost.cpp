@@ -248,18 +248,6 @@ void plumhost::on_preset_selected()
 bool plumhost::on_exit(GdkEventAny* event) 
 {
 	m_audio.stop();
-
-	for (uint32_t index = 0; index < m_engine.max_effects() + 1; ++index)
-	{
-		auto row = m_track->get_row_at_index(index);
-		auto tl = (tracklabel *)row->get_child();
-
-		if (tl && tl->get_plugin())
-		{		
-			unplug(row);
-		}
-	};
-
 	close_library();
 
 	return false;
@@ -480,9 +468,24 @@ void plumhost::open_library(std::string filepath)
 	}
 }
 
+void plumhost::clear_track()
+{
+	for (uint32_t index = 0; index < m_engine.max_effects() + 1; ++index)
+	{
+		auto row = m_track->get_row_at_index(index);
+		auto tl = (tracklabel *)row->get_child();
+
+		if (tl && tl->get_plugin())
+		{		
+			unplug(row);
+		}
+	};
+}
+
 void plumhost::close_library()
 {
 	closeview();
+	clear_track();
 
 	m_ts->clear();
 	m_catalog.close();
@@ -561,7 +564,7 @@ void plumhost::unplug(Gtk::ListBoxRow *row)
 	}
 	else
 	{
-		m_engine.set_effect(nullptr, sel->get_index() - 1);
+		m_engine.set_effect(nullptr, row->get_index() - 1);
 	}
 
 	item->set_plugin(nullptr);

@@ -93,6 +93,7 @@ class plumhost : public Gtk::Window, public plum::ihost
 	void close_library();
 	void plug(std::string name, bool is_synth);
 	void unplug(Gtk::ListBoxRow *);
+	void clear_track();
 
 	plum::iplugin *get_selected_plugin();
 
